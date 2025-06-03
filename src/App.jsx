@@ -1,9 +1,10 @@
 import React from 'react'
+import SignupPage from './pages/auth/SignupPage'
 
 export default function App() {
   return (
-    <div>
-      <h1>Welcome T</h1>
-    </div>
+    <>
+      <SignupPage />
+    </>
   )
 }
