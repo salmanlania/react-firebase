@@ -1,24 +1,21 @@
 import { Box, Button, TextField, Typography, Link } from '@mui/material'
 import { useState } from 'react'
-import { signup, auth } from '../../config/Firebase'
+import { login, auth } from '../../config/Firebase'
 import { useNavigate } from 'react-router-dom'
 
-const SingupForm = () => {
+const LoginForm = () => {
     const navigate = useNavigate()
     const [form, setForm] = useState({
-        first_name: '',
-        last_name: '',
         email: '',
         password: '',
     })
 
-    const signupHandler = async () => {
+    const loginHandler = async () => {
         try {
             const email = form.email
             const password = form.password
-            const first_name = form.first_name
-            const last_name = form.last_name
-            await signup(email, password, first_name, last_name)
+            await login(email, password)
+            console.log('form' , form)
         } catch (error) {
             console.log('error', error)
         }
@@ -49,26 +46,9 @@ const SingupForm = () => {
                 }}
             >
                 <Typography variant="h5" fontWeight={600} textAlign="center" mb={2}>
-                    Create Account
+                    Log In
                 </Typography>
 
-                <TextField
-                    type="text"
-                    label="First Name"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    value={form.first_name}
-                    onChange={(e) => setForm({ ...form, first_name: e.target.value })}
-                />
-                <TextField
-                    type="text"
-                    label="Last Name"
-                    variant="outlined"
-                    fullWidth
-                    value={form.last_name}
-                    onChange={(e) => setForm({ ...form, last_name: e.target.value })}
-                />
                 <TextField
                     type="email"
                     label="Email Address"
@@ -91,9 +71,9 @@ const SingupForm = () => {
                     variant="contained"
                     size="large"
                     sx={{ mt: 1 }}
-                    onClick={signupHandler}
+                    onClick={loginHandler}
                 >
-                    Sign Up
+                    Sign In
                 </Button>
                 <Typography
                     sx={{
@@ -102,14 +82,14 @@ const SingupForm = () => {
                         textAlign: 'center',
                     }}
                 >
-                    Already have an account?{' '}
+                    If don't have account?{' '}
                     <Link
                         component="button"
                         variant="body2"
-                        onClick={()=>navigate('/login')}
+                        onClick={() => navigate('/signup')}
                         sx={{ fontWeight: 600 }}
                     >
-                        Login
+                        Signup
                     </Link>
                 </Typography>
             </Box>
@@ -117,4 +97,4 @@ const SingupForm = () => {
     )
 }
 
-export default SingupForm
+export default LoginForm

@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCdJXwDLwneSJQuDLpRT9l2OiAm7TJC61E",
@@ -11,24 +12,45 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const login = async (email , password) => {
-
+const signup = async (email, password, firstName, lastName) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
         const user = userCredential.user;
+        const data = await setDoc(doc(db, "blogUsers", user.uid), {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            createdAt: new Date()
+        });
+        console.log('data', data)
         console.log('user', user)
         console.log('userCredential', userCredential)
     } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // alert(errorMessage)
-        console.log({errorMessage , errorCode})
+        alert(errorMessage)
+        console.log({ errorMessage, errorCode })
+    }
+}
+
+const login = async (email, password) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        const user = userCredential.user;
+        console.log('user', user)
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage)
+        console.log({ errorMessage, errorCode })
     }
 }
 
 export {
+    signup,
     login,
-    auth
+    auth,
 }
